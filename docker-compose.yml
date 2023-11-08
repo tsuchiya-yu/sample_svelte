@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    build: .
+    tty: true
+    volumes:
+      - ./sample_svelte:/sample_svelte
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
