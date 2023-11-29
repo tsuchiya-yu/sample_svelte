@@ -1,0 +1,21 @@
+query all_siteUpdates {
+  siteUpdates(
+    orderBy: [
+      {
+        title: desc
+      }
+    ],
+    where: {
+      publishedAt: {
+        gte: "2022-01-01T00:00:00.000Z"
+      }
+    }
+    take: 5
+  ) {
+    id
+    title
+    content
+    publishedAt
+    updatedAt
+  }
+}
