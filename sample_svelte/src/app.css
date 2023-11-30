@@ -1,8 +1,8 @@
+@import './styles/reset.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './styles/reset.css';
 
 body {
     font-family:'メイリオ', 'Meiryo','ＭＳ ゴシック','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
