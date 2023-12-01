@@ -25,17 +25,19 @@
 
 </script>
 
-<h1 class="text-3xl font-bold underline">
-お知らせ
-</h1>
-{#each siteUpdates as update}
-  <div>
-    <p class="published">{formatDate(update.publishedAt)}</p>
-    <h2 class='title'>{update.title}</h2>
-    <!-- <p>{update.content}</p> -->
-    <!-- <p>Updated: {update.updatedAt}</p> -->
-  </div>
-{/each}
+<div class='p-20 mx-auto w-[1100px] max-w-full bg-gray-200 rounded-3xl'>
+  <h1 class="text-3xl font-bold">お知らせ</h1>
+    <div class='py-4'>
+      {#each siteUpdates as update}
+        <div class='py-2'>
+          <p class="published text-sm">{formatDate(update.publishedAt)}</p>
+          <h2 class='title text-base'>{update.title}</h2>
+          <!-- <p>{update.content}</p> -->
+          <!-- <p>Updated: {update.updatedAt}</p> -->
+        </div>
+      {/each}
+    </div>
+</div>
 
 
 <style lang="postcss">
@@ -43,12 +45,12 @@
     background-color: theme(colors.gray.100);
   }
   .title {
-    font-size: 14px;
+    /* font-size: 14px; */
     font-weight: bold;
   }
 
   .published {
-    font-size: 10px;
+    /* font-size: 10px; */
     color: #888888;
   }
 </style>
