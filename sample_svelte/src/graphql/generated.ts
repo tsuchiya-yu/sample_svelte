@@ -273,8 +273,7 @@ export type All_SiteUpdatesQuery = { __typename?: 'Query', siteUpdates?: Array<{
 export const All_SiteUpdatesDoc = gql`
     query all_siteUpdates {
   siteUpdates(
-    orderBy: [{title: desc}]
-    where: {publishedAt: {gte: "2022-01-01T00:00:00.000Z"}}
+    orderBy: [{publishedAt: asc}]
     take: 5
   ) {
     id

@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { formatDate } from '$lib/helpers';
   import client from '../../lib/graphql/apollo';
   import { All_SiteUpdatesDoc } from '../graphql/generated';
+  import { siteUpdatesStore } from '$lib/store';
 
   let siteUpdates: { id: number, title: string, content: string, publishedAt: string, updatedAt: string }[] = [];
 
@@ -10,18 +12,13 @@
       const response = await client.query({
         query: All_SiteUpdatesDoc,
       });
-      siteUpdates = response.data.siteUpdates;
+      siteUpdatesStore.set(response.data.siteUpdates);
+      $: siteUpdates = $siteUpdatesStore;
       console.log(siteUpdates);
     } catch (error) {
       console.error('クエリ実行中のエラー:', error);
     }
   });
-
-  // 日付をフォーマット
-  function formatDate(dateString: string) {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Intl.DateTimeFormat('ja-JP', options).format(new Date(dateString));
-  }
 
 </script>
 
@@ -32,6 +29,7 @@
         <div class='py-2'>
           <p class="published text-sm">{formatDate(update.publishedAt)}</p>
           <h2 class='title text-base'>{update.title}</h2>
+          <a href="/updates/{update.id}">詳細</a>
           <!-- <p>{update.content}</p> -->
           <!-- <p>Updated: {update.updatedAt}</p> -->
         </div>
