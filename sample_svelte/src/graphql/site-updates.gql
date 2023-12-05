@@ -19,3 +19,13 @@ query all_siteUpdates {
     updatedAt
   }
 }
+
+query GetSiteUpdate($id: Int!) {
+  siteUpdate(id: $id) {
+    id
+    title
+    content
+    publishedAt
+    updatedAt
+  }
+}

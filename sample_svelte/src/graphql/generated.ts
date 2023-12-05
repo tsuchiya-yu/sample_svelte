@@ -28,12 +28,6 @@ export type CodeMeg = {
   statusCode: Scalars['Int']['output'];
 };
 
-export type CreateSampleInput = {
-  content: Scalars['String']['input'];
-  id: Scalars['Int']['input'];
-  title?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type DateTimeFilter = {
   equals?: InputMaybe<Scalars['DateTime']['input']>;
   gt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -58,17 +52,9 @@ export type IntFilter = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createSample: Sample;
   createUser: User;
-  removeSample?: Maybe<Sample>;
   signIn: Token;
   signOut: CodeMeg;
-  updateSample: Sample;
-};
-
-
-export type MutationCreateSampleArgs = {
-  createSampleInput: CreateSampleInput;
 };
 
 
@@ -77,18 +63,8 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationRemoveSampleArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
 export type MutationSignInArgs = {
   data: SignInUserArgs;
-};
-
-
-export type MutationUpdateSampleArgs = {
-  updateSampleInput: UpdateSampleInput;
 };
 
 export type NestedDateTimeFilter = {
@@ -130,8 +106,6 @@ export type NestedStringFilter = {
 export type Query = {
   __typename?: 'Query';
   dummyUser?: Maybe<User>;
-  sample?: Maybe<Sample>;
-  samples: Array<Maybe<Sample>>;
   siteUpdate?: Maybe<SiteUpdates>;
   siteUpdates?: Maybe<Array<Maybe<SiteUpdates>>>;
   user?: Maybe<User>;
@@ -139,11 +113,6 @@ export type Query = {
 
 
 export type QueryDummyUserArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type QuerySampleArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -165,13 +134,6 @@ export type QuerySiteUpdatesArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Int']['input'];
-};
-
-export type Sample = {
-  __typename?: 'Sample';
-  content: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
-  title?: Maybe<Scalars['String']['output']>;
 };
 
 export type SignInUserArgs = {
@@ -240,10 +202,6 @@ export type Token = {
   token: Scalars['String']['output'];
 };
 
-export type UpdateSampleInput = {
-  id: Scalars['Int']['input'];
-};
-
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
@@ -269,11 +227,19 @@ export type All_SiteUpdatesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type All_SiteUpdatesQuery = { __typename?: 'Query', siteUpdates?: Array<{ __typename?: 'SiteUpdates', id: number, title: string, content: string, publishedAt: any, updatedAt: any } | null> | null };
 
+export type GetSiteUpdateQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetSiteUpdateQuery = { __typename?: 'Query', siteUpdate?: { __typename?: 'SiteUpdates', id: number, title: string, content: string, publishedAt: any, updatedAt: any } | null };
+
 
 export const All_SiteUpdatesDoc = gql`
     query all_siteUpdates {
   siteUpdates(
-    orderBy: [{publishedAt: asc}]
+    orderBy: [{title: desc}]
+    where: {publishedAt: {gte: "2022-01-01T00:00:00.000Z"}}
     take: 5
   ) {
     id
@@ -284,28 +250,74 @@ export const All_SiteUpdatesDoc = gql`
   }
 }
     `;
-export const all_siteUpdates = (
+export const GetSiteUpdateDoc = gql`
+    query GetSiteUpdate($id: Int!) {
+  siteUpdate(id: $id) {
+    id
+    title
+    content
+    publishedAt
+    updatedAt
+  }
+}
+    `;
+  export const all_siteUpdates = (
             options: Omit<
-              WatchQueryOptions<AllSiteUpdatesQueryVariables>, 
+              WatchQueryOptions<All_SiteUpdatesQueryVariables>, 
               "query"
             >
           ): Readable<
-            ApolloQueryResult<AllSiteUpdatesQuery> & {
+            ApolloQueryResult<All_SiteUpdatesQuery> & {
               query: ObservableQuery<
-                AllSiteUpdatesQuery,
-                AllSiteUpdatesQueryVariables
+                All_SiteUpdatesQuery,
+                All_SiteUpdatesQueryVariables
               >;
             }
           > => {
             const q = client.watchQuery({
-              query: AllSiteUpdatesDoc,
+              query: All_SiteUpdatesDoc,
               ...options,
             });
             var result = readable<
-              ApolloQueryResult<AllSiteUpdatesQuery> & {
+              ApolloQueryResult<All_SiteUpdatesQuery> & {
                 query: ObservableQuery<
-                  AllSiteUpdatesQuery,
-                  AllSiteUpdatesQueryVariables
+                  All_SiteUpdatesQuery,
+                  All_SiteUpdatesQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const GetSiteUpdate = (
+            options: Omit<
+              WatchQueryOptions<GetSiteUpdateQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetSiteUpdateQuery> & {
+              query: ObservableQuery<
+                GetSiteUpdateQuery,
+                GetSiteUpdateQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetSiteUpdateDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetSiteUpdateQuery> & {
+                query: ObservableQuery<
+                  GetSiteUpdateQuery,
+                  GetSiteUpdateQueryVariables
                 >;
               }
             >(

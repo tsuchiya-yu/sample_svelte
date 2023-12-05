@@ -29,9 +29,7 @@
         <div class='py-2'>
           <p class="published text-sm">{formatDate(update.publishedAt)}</p>
           <h2 class='title text-base'>{update.title}</h2>
-          <a href="/updates/{update.id}">詳細</a>
-          <!-- <p>{update.content}</p> -->
-          <!-- <p>Updated: {update.updatedAt}</p> -->
+          <a href="/updates/{update.id}">詳細画面へのリンク</a>
         </div>
       {/each}
     </div>

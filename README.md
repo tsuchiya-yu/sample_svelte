@@ -7,3 +7,6 @@ docker compose up -d
 
 ## 画面
 http://localhost:5173/
+
+## generated.tsの生成コマンド
+npx graphql-codegen
