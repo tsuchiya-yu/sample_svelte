@@ -106,6 +106,7 @@ export type NestedStringFilter = {
 export type Query = {
   __typename?: 'Query';
   dummyUser?: Maybe<User>;
+  isUserLoggedIn: Scalars['Boolean']['output'];
   siteUpdate?: Maybe<SiteUpdates>;
   siteUpdates?: Maybe<Array<Maybe<SiteUpdates>>>;
   user?: Maybe<User>;
@@ -261,7 +262,7 @@ export const GetSiteUpdateDoc = gql`
   }
 }
     `;
-  export const all_siteUpdates = (
+export const all_siteUpdates = (
             options: Omit<
               WatchQueryOptions<All_SiteUpdatesQueryVariables>, 
               "query"
@@ -269,7 +270,7 @@ export const GetSiteUpdateDoc = gql`
           ): Readable<
             ApolloQueryResult<All_SiteUpdatesQuery> & {
               query: ObservableQuery<
-                All_SiteUpdatesQuery,
+              All_SiteUpdatesQuery,
                 All_SiteUpdatesQueryVariables
               >;
             }
@@ -281,7 +282,7 @@ export const GetSiteUpdateDoc = gql`
             var result = readable<
               ApolloQueryResult<All_SiteUpdatesQuery> & {
                 query: ObservableQuery<
-                  All_SiteUpdatesQuery,
+                All_SiteUpdatesQuery,
                   All_SiteUpdatesQueryVariables
                 >;
               }

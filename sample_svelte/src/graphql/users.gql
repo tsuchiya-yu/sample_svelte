@@ -1,0 +1,47 @@
+# users.gql
+
+scalar DateTime
+
+type User {
+  id: Int!
+  name: String!
+  email: String!
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UserCreateInput {
+  name: String!
+  email: String!
+  password: String!
+  isDeleted: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SignInUserArgs {
+  email: String!
+  password: String!
+}
+
+type CodeMsg {
+  statusCode: Int!
+  message: String!
+}
+
+type Token {
+  token: String!
+}
+
+type Query {
+  user(id: Int!): User
+  dummyUser(id: Int!): User
+  isUserLoggedIn: Boolean!
+}
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  signIn(data: SignInUserArgs!): Token!
+  signOut: CodeMsg!
+}
