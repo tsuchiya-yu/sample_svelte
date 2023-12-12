@@ -38,15 +38,15 @@
             alert('メールアドレスかパスワードが違います');
         }
     }
-    </script>
-    
-    <div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
-        <Heading text="ログイン" />
-        <form on:submit|preventDefault={handleLogin}>
-            <InputLabel forId="email" text="メールアドレス" />
-            <InputField id="email" type="email" placeholder="hanako@example.com" bind:value={email} required/>
-            <InputLabel forId="password" text="パスワード" />
-            <InputField id="password" type="password" placeholder="1234abcd!" bind:value={password} required/>
-            <Button text="ログイン" disabled={!email || !password} />
-        </form>
-    </div>
+</script>
+
+<div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
+    <Heading text="ログイン" />
+    <form on:submit|preventDefault={handleLogin}>
+        <InputLabel forId="email" text="メールアドレス" />
+        <InputField id="email" type="email" placeholder="hanako@example.com" bind:value={email} required/>
+        <InputLabel forId="password" text="パスワード" />
+        <InputField id="password" type="password" placeholder="1234abcd!" bind:value={password} required/>
+        <Button text="ログイン" disabled={!email || !password} />
+    </form>
+</div>
