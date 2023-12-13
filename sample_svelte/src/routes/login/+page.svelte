@@ -5,7 +5,10 @@
     import InputField from '$lib/components/InputField.svelte';
     import InputLabel from '$lib/components/InputLabel.svelte';
     import Button from '$lib/components/Button.svelte';
+    import ButtonReverse from '$lib/components/ButtonReverse.svelte';
     import Heading from '$lib/components/Heading.svelte';
+    import CustomLink from '$lib/components/CustomLink.svelte';
+    import Hr from '$lib/components/Hr.svelte';
     
     let email = '';
     let password = '';
@@ -38,6 +41,9 @@
             alert('メールアドレスかパスワードが違います');
         }
     }
+    function navigateToSignup() {
+        goto('/signup');
+    }
 </script>
 
 <div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
@@ -47,6 +53,9 @@
         <InputField id="email" type="email" placeholder="hanako@example.com" bind:value={email} required/>
         <InputLabel forId="password" text="パスワード" />
         <InputField id="password" type="password" placeholder="1234abcd!" bind:value={password} required/>
-        <Button text="ログイン" disabled={!email || !password} />
+        <Button text="ログインする" type='submit' disabled={!email || !password} />
     </form>
+    <CustomLink url="https://www.google.com/" text="パスワードを忘れた場合はこちら" />
+    <div class='my-8'><Hr/></div>
+    <ButtonReverse text="会員登録はこちら" on:click={navigateToSignup}/>
 </div>
