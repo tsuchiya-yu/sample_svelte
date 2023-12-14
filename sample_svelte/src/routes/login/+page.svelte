@@ -9,6 +9,7 @@
     import Heading from '$lib/components/Heading.svelte';
     import CustomLink from '$lib/components/CustomLink.svelte';
     import Hr from '$lib/components/Hr.svelte';
+    import { saveToken } from '$lib/tokenStorage';
     
     let email = '';
     let password = '';
@@ -29,10 +30,11 @@
                 mutation: SIGN_IN,
                 variables: { email, password },
             });
-            if (data.signIn.token) {
-                console.log('ログイン成功:', data.signIn.token);
+            const token = data.signIn.token;
+            if (token) {
+                console.log('ログイン成功:', token);
+                saveToken(token);
                 // TODO:ログイン後の処理
-                // ・ローカルストレージにトークンを保存
                 // ・マイペにリダイレクト
                 goto('/');
             }

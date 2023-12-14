@@ -7,6 +7,7 @@
     import Button from '$lib/components/Button.svelte';
     import CustomLink from '$lib/components/CustomLink.svelte';
     import Heading from '$lib/components/Heading.svelte';
+    import { saveToken } from '$lib/tokenStorage';
 
     let email = '';
     let name = '';
@@ -16,10 +17,7 @@
     const SIGN_UP = gql`
     mutation CreateUser($email: String!, $password: String!, $name: String!) {
         createUser(data: {name: $name, email: $email, password: $password }) {
-            id
-            email
-            password
-            name
+            token
         }
     }
     `;
@@ -35,9 +33,11 @@
                 mutation: SIGN_UP,
                 variables: { email, password, name },
             });
-            if (data.createUser) {
-                console.log('サインアップ成功:', data.createUser);
-                goto('/'); // 遷移先を適切に設定
+            const token = data.createUser.token;
+            if (token) {
+                console.log('サインアップ成功:', token);
+                saveToken(token);
+                goto('/');
             }
         } catch (error) {
             console.error('サインアップエラー:', error);
