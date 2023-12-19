@@ -1,0 +1,51 @@
+# UserProfileの取得
+query GetUserProfile($id: Int!) {
+  userProfile(id: $id) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+
+# UserProfileの一覧を取得
+query GetUserProfileList {
+  userProfiles {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+
+# UserProfileの作成
+mutation CreateUserProfile($data: CreateUserProfileInput!) {
+  createUserProfile(data: $data) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+
+# UserProfileの更新
+mutation UpdateUserProfile($id: Int!, $data: UpdateUserProfileInput!) {
+  updateUserProfile(id: $id, data: $data) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}

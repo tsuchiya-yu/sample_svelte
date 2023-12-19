@@ -1,6 +1,6 @@
 import client from '../../lib/graphql/apollo';
 import type {
-        ApolloQueryResult, ObservableQuery, WatchQueryOptions
+        ApolloQueryResult, ObservableQuery, WatchQueryOptions, MutationOptions
       } from "@apollo/client";
 import { readable } from "svelte/store";
 import type { Readable } from "svelte/store";
@@ -22,10 +22,29 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type BooleanFilter = {
+  equals?: InputMaybe<Scalars['Boolean']['input']>;
+  not?: InputMaybe<NestedBooleanFilter>;
+};
+
 export type CodeMeg = {
   __typename?: 'CodeMeg';
   message: Scalars['String']['output'];
   statusCode: Scalars['Int']['output'];
+};
+
+export type CreateUserProfileInput = {
+  catchphrase?: InputMaybe<Scalars['String']['input']>;
+  introduction?: InputMaybe<Scalars['String']['input']>;
+  shopMstId?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['Int']['input'];
+};
+
+export type CreateUserSnsInput = {
+  facebook?: InputMaybe<Scalars['String']['input']>;
+  twitter?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['Int']['input'];
+  x?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DateTimeFilter = {
@@ -52,9 +71,13 @@ export type IntFilter = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser: User;
+  createUser: Token;
+  createUserProfile: UserProfile;
+  createUserSns: UserSns;
   signIn: Token;
   signOut: CodeMeg;
+  updateUserProfile: UserProfile;
+  updateUserSns: UserSns;
 };
 
 
@@ -63,8 +86,35 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationCreateUserProfileArgs = {
+  data: CreateUserProfileInput;
+};
+
+
+export type MutationCreateUserSnsArgs = {
+  data: CreateUserSnsInput;
+};
+
+
 export type MutationSignInArgs = {
   data: SignInUserArgs;
+};
+
+
+export type MutationUpdateUserProfileArgs = {
+  data: UpdateUserProfileInput;
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateUserSnsArgs = {
+  data: UpdateUserSnsInput;
+  id: Scalars['Int']['input'];
+};
+
+export type NestedBooleanFilter = {
+  equals?: InputMaybe<Scalars['Boolean']['input']>;
+  not?: InputMaybe<NestedBooleanFilter>;
 };
 
 export type NestedDateTimeFilter = {
@@ -107,14 +157,29 @@ export type Query = {
   __typename?: 'Query';
   dummyUser?: Maybe<User>;
   isUserLoggedIn: Scalars['Boolean']['output'];
+  shopMsts?: Maybe<Array<Maybe<ShopMst>>>;
   siteUpdate?: Maybe<SiteUpdates>;
   siteUpdates?: Maybe<Array<Maybe<SiteUpdates>>>;
   user?: Maybe<User>;
+  userProfile?: Maybe<UserProfile>;
+  userProfiles?: Maybe<Array<UserProfile>>;
+  userSns?: Maybe<UserSns>;
+  userSnsList?: Maybe<Array<UserSns>>;
 };
 
 
 export type QueryDummyUserArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryShopMstsArgs = {
+  cursor?: InputMaybe<ShopMstWhereUniqueInput>;
+  distinct?: InputMaybe<Array<InputMaybe<ShopMstScalarFieldEnum>>>;
+  orderBy?: InputMaybe<Array<InputMaybe<ShopMstOrderByWithRelationInput>>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<ShopMstWhereInput>;
 };
 
 
@@ -135,6 +200,57 @@ export type QuerySiteUpdatesArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryUserProfileArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryUserSnsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type ShopMst = {
+  __typename?: 'ShopMst';
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ShopMstOrderByWithRelationInput = {
+  code?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  isDeleted?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export enum ShopMstScalarFieldEnum {
+  Code = 'code',
+  CreatedAt = 'createdAt',
+  Id = 'id',
+  IsDeleted = 'isDeleted',
+  Name = 'name',
+  UpdatedAt = 'updatedAt'
+}
+
+export type ShopMstWhereInput = {
+  code?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<IntFilter>;
+  isDeleted?: InputMaybe<BooleanFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ShopMstWhereUniqueInput = {
+  id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SignInUserArgs = {
@@ -203,6 +319,18 @@ export type Token = {
   token: Scalars['String']['output'];
 };
 
+export type UpdateUserProfileInput = {
+  catchphrase?: InputMaybe<Scalars['String']['input']>;
+  introduction?: InputMaybe<Scalars['String']['input']>;
+  shopMstId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateUserSnsInput = {
+  facebook?: InputMaybe<Scalars['String']['input']>;
+  twitter?: InputMaybe<Scalars['String']['input']>;
+  x?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
@@ -223,6 +351,28 @@ export type UserCreateInput = {
   updatedAt?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserProfile = {
+  __typename?: 'UserProfile';
+  catchphrase?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  introduction?: Maybe<Scalars['String']['output']>;
+  shopMstId?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['String']['output'];
+  userId: Scalars['Int']['output'];
+};
+
+export type UserSns = {
+  __typename?: 'UserSns';
+  createdAt: Scalars['String']['output'];
+  facebook?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  twitter?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
+  userId: Scalars['Int']['output'];
+  x?: Maybe<Scalars['String']['output']>;
+};
+
 export type All_SiteUpdatesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -234,6 +384,33 @@ export type GetSiteUpdateQueryVariables = Exact<{
 
 
 export type GetSiteUpdateQuery = { __typename?: 'Query', siteUpdate?: { __typename?: 'SiteUpdates', id: number, title: string, content: string, publishedAt: any, updatedAt: any } | null };
+
+export type GetUserProfileQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetUserProfileQuery = { __typename?: 'Query', userProfile?: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } | null };
+
+export type GetUserProfileListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserProfileListQuery = { __typename?: 'Query', userProfiles?: Array<{ __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string }> | null };
+
+export type CreateUserProfileMutationVariables = Exact<{
+  data: CreateUserProfileInput;
+}>;
+
+
+export type CreateUserProfileMutation = { __typename?: 'Mutation', createUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
+
+export type UpdateUserProfileMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: UpdateUserProfileInput;
+}>;
+
+
+export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
 
 
 export const All_SiteUpdatesDoc = gql`
@@ -262,6 +439,58 @@ export const GetSiteUpdateDoc = gql`
   }
 }
     `;
+export const GetUserProfileDoc = gql`
+    query GetUserProfile($id: Int!) {
+  userProfile(id: $id) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const GetUserProfileListDoc = gql`
+    query GetUserProfileList {
+  userProfiles {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreateUserProfileDoc = gql`
+    mutation CreateUserProfile($data: CreateUserProfileInput!) {
+  createUserProfile(data: $data) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const UpdateUserProfileDoc = gql`
+    mutation UpdateUserProfile($id: Int!, $data: UpdateUserProfileInput!) {
+  updateUserProfile(id: $id, data: $data) {
+    id
+    userId
+    shopMstId
+    catchphrase
+    introduction
+    createdAt
+    updatedAt
+  }
+}
+    `;
 export const all_siteUpdates = (
             options: Omit<
               WatchQueryOptions<All_SiteUpdatesQueryVariables>, 
@@ -270,7 +499,7 @@ export const all_siteUpdates = (
           ): Readable<
             ApolloQueryResult<All_SiteUpdatesQuery> & {
               query: ObservableQuery<
-              All_SiteUpdatesQuery,
+                All_SiteUpdatesQuery,
                 All_SiteUpdatesQueryVariables
               >;
             }
@@ -282,7 +511,7 @@ export const all_siteUpdates = (
             var result = readable<
               ApolloQueryResult<All_SiteUpdatesQuery> & {
                 query: ObservableQuery<
-                All_SiteUpdatesQuery,
+                  All_SiteUpdatesQuery,
                   All_SiteUpdatesQueryVariables
                 >;
               }
@@ -332,3 +561,97 @@ export const GetSiteUpdate = (
             return result;
           }
         
+export const GetUserProfile = (
+            options: Omit<
+              WatchQueryOptions<GetUserProfileQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetUserProfileQuery> & {
+              query: ObservableQuery<
+                GetUserProfileQuery,
+                GetUserProfileQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetUserProfileDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetUserProfileQuery> & {
+                query: ObservableQuery<
+                  GetUserProfileQuery,
+                  GetUserProfileQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const GetUserProfileList = (
+            options: Omit<
+              WatchQueryOptions<GetUserProfileListQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetUserProfileListQuery> & {
+              query: ObservableQuery<
+                GetUserProfileListQuery,
+                GetUserProfileListQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetUserProfileListDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetUserProfileListQuery> & {
+                query: ObservableQuery<
+                  GetUserProfileListQuery,
+                  GetUserProfileListQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const CreateUserProfile = (
+            options: Omit<
+              MutationOptions<any, CreateUserProfileMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<CreateUserProfileMutation, CreateUserProfileMutationVariables>({
+              mutation: CreateUserProfileDoc,
+              ...options,
+            });
+            return m;
+          }
+export const UpdateUserProfile = (
+            options: Omit<
+              MutationOptions<any, UpdateUserProfileMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>({
+              mutation: UpdateUserProfileDoc,
+              ...options,
+            });
+            return m;
+          }

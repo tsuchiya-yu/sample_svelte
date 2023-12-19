@@ -1,0 +1,51 @@
+# UserSnsの取得
+query GetUserSns($id: Int!) {
+  userSns(id: $id) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+
+# UserSnsの一覧を取得
+query GetUserSnsList {
+  userSnsList {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+
+# UserSnsの作成
+mutation CreateUserSns($data: CreateUserSnsInput!) {
+  createUserSns(data: $data) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+
+# UserSnsの更新
+mutation UpdateUserSns($id: Int!, $data: UpdateUserSnsInput!) {
+  updateUserSns(id: $id, data: $data) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
