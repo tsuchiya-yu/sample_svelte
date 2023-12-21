@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
+import { getToken } from '$lib/tokenStorage';
 
 // HTTPリンクの設定
 const httpLink = createHttpLink({
@@ -11,7 +12,7 @@ const httpLink = createHttpLink({
 
 // 認証トークンをリクエストヘッダーに追加するためのミドルウェア
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('authToken');
+  const token = getToken();
   return {
     headers: {
       ...headers,
