@@ -1,4 +1,4 @@
-query all_siteUpdates {
+query AllSiteUpdates {
   siteUpdates(
     orderBy: [
       {

@@ -373,10 +373,15 @@ export type UserSns = {
   x?: Maybe<Scalars['String']['output']>;
 };
 
-export type All_SiteUpdatesQueryVariables = Exact<{ [key: string]: never; }>;
+export type ShopMstsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type All_SiteUpdatesQuery = { __typename?: 'Query', siteUpdates?: Array<{ __typename?: 'SiteUpdates', id: number, title: string, content: string, publishedAt: any, updatedAt: any } | null> | null };
+export type ShopMstsQuery = { __typename?: 'Query', shopMsts?: Array<{ __typename?: 'ShopMst', code: string, name: string } | null> | null };
+
+export type AllSiteUpdatesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllSiteUpdatesQuery = { __typename?: 'Query', siteUpdates?: Array<{ __typename?: 'SiteUpdates', id: number, title: string, content: string, publishedAt: any, updatedAt: any } | null> | null };
 
 export type GetSiteUpdateQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -412,9 +417,44 @@ export type UpdateUserProfileMutationVariables = Exact<{
 
 export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
 
+export type GetUserSnsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
 
-export const All_SiteUpdatesDoc = gql`
-    query all_siteUpdates {
+
+export type GetUserSnsQuery = { __typename?: 'Query', userSns?: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } | null };
+
+export type GetUserSnsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserSnsListQuery = { __typename?: 'Query', userSnsList?: Array<{ __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null }> | null };
+
+export type CreateUserSnsMutationVariables = Exact<{
+  data: CreateUserSnsInput;
+}>;
+
+
+export type CreateUserSnsMutation = { __typename?: 'Mutation', createUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } };
+
+export type UpdateUserSnsMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: UpdateUserSnsInput;
+}>;
+
+
+export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } };
+
+
+export const ShopMstsDoc = gql`
+    query ShopMsts {
+  shopMsts(orderBy: [{code: asc}]) {
+    code
+    name
+  }
+}
+    `;
+export const AllSiteUpdatesDoc = gql`
+    query AllSiteUpdates {
   siteUpdates(
     orderBy: [{title: desc}]
     where: {publishedAt: {gte: "2022-01-01T00:00:00.000Z"}}
@@ -491,28 +531,115 @@ export const UpdateUserProfileDoc = gql`
   }
 }
     `;
-export const all_siteUpdates = (
+export const GetUserSnsDoc = gql`
+    query GetUserSns($id: Int!) {
+  userSns(id: $id) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+    `;
+export const GetUserSnsListDoc = gql`
+    query GetUserSnsList {
+  userSnsList {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+    `;
+export const CreateUserSnsDoc = gql`
+    mutation CreateUserSns($data: CreateUserSnsInput!) {
+  createUserSns(data: $data) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+    `;
+export const UpdateUserSnsDoc = gql`
+    mutation UpdateUserSns($id: Int!, $data: UpdateUserSnsInput!) {
+  updateUserSns(id: $id, data: $data) {
+    id
+    userId
+    createdAt
+    updatedAt
+    x
+    facebook
+    twitter
+  }
+}
+    `;
+export const ShopMsts = (
             options: Omit<
-              WatchQueryOptions<All_SiteUpdatesQueryVariables>, 
+              WatchQueryOptions<ShopMstsQueryVariables>, 
               "query"
             >
           ): Readable<
-            ApolloQueryResult<All_SiteUpdatesQuery> & {
+            ApolloQueryResult<ShopMstsQuery> & {
               query: ObservableQuery<
-                All_SiteUpdatesQuery,
-                All_SiteUpdatesQueryVariables
+                ShopMstsQuery,
+                ShopMstsQueryVariables
               >;
             }
           > => {
             const q = client.watchQuery({
-              query: All_SiteUpdatesDoc,
+              query: ShopMstsDoc,
               ...options,
             });
             var result = readable<
-              ApolloQueryResult<All_SiteUpdatesQuery> & {
+              ApolloQueryResult<ShopMstsQuery> & {
                 query: ObservableQuery<
-                  All_SiteUpdatesQuery,
-                  All_SiteUpdatesQueryVariables
+                  ShopMstsQuery,
+                  ShopMstsQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const AllSiteUpdates = (
+            options: Omit<
+              WatchQueryOptions<AllSiteUpdatesQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<AllSiteUpdatesQuery> & {
+              query: ObservableQuery<
+                AllSiteUpdatesQuery,
+                AllSiteUpdatesQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: AllSiteUpdatesDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<AllSiteUpdatesQuery> & {
+                query: ObservableQuery<
+                  AllSiteUpdatesQuery,
+                  AllSiteUpdatesQueryVariables
                 >;
               }
             >(
@@ -651,6 +778,100 @@ export const UpdateUserProfile = (
           ) => {
             const m = client.mutate<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>({
               mutation: UpdateUserProfileDoc,
+              ...options,
+            });
+            return m;
+          }
+export const GetUserSns = (
+            options: Omit<
+              WatchQueryOptions<GetUserSnsQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetUserSnsQuery> & {
+              query: ObservableQuery<
+                GetUserSnsQuery,
+                GetUserSnsQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetUserSnsDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetUserSnsQuery> & {
+                query: ObservableQuery<
+                  GetUserSnsQuery,
+                  GetUserSnsQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const GetUserSnsList = (
+            options: Omit<
+              WatchQueryOptions<GetUserSnsListQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetUserSnsListQuery> & {
+              query: ObservableQuery<
+                GetUserSnsListQuery,
+                GetUserSnsListQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetUserSnsListDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetUserSnsListQuery> & {
+                query: ObservableQuery<
+                  GetUserSnsListQuery,
+                  GetUserSnsListQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
+export const CreateUserSns = (
+            options: Omit<
+              MutationOptions<any, CreateUserSnsMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<CreateUserSnsMutation, CreateUserSnsMutationVariables>({
+              mutation: CreateUserSnsDoc,
+              ...options,
+            });
+            return m;
+          }
+export const UpdateUserSns = (
+            options: Omit<
+              MutationOptions<any, UpdateUserSnsMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<UpdateUserSnsMutation, UpdateUserSnsMutationVariables>({
+              mutation: UpdateUserSnsDoc,
               ...options,
             });
             return m;

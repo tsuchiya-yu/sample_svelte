@@ -1,0 +1,12 @@
+query ShopMsts {
+  shopMsts(
+    orderBy: [
+      {
+        code: asc
+      }
+    ]
+  ) {
+    code,
+    name
+  }
+}

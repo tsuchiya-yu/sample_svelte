@@ -12,6 +12,7 @@ const IS_USER_LOGGED_IN = gql`
     }
 `;
 
+// ログイン済み？
 export async function checkLoginStatus() {
     try {
         const token = getToken();

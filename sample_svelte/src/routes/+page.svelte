@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { formatDate } from '$lib/helpers';
   import client from '../../lib/graphql/apollo';
-  import { All_SiteUpdatesDoc } from '../graphql/generated';
+  import { AllSiteUpdatesDoc } from '../graphql/generated';
   import { siteUpdatesStore } from '$lib/store';
 
   let siteUpdates: { id: number, title: string, content: string, publishedAt: string, updatedAt: string }[] = [];
@@ -10,7 +10,7 @@
   onMount(async () => {
     try {
       const response = await client.query({
-        query: All_SiteUpdatesDoc,
+        query: AllSiteUpdatesDoc,
       });
       siteUpdatesStore.set(response.data.siteUpdates);
       $: siteUpdates = $siteUpdatesStore;
