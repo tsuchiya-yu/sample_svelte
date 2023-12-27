@@ -12,7 +12,7 @@
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
     import { CreateUserProfileDoc, CreateUserSnsDoc} from '../../../graphql/generated';
-    import type { CreateUserProfileInput } from '../../../graphql/generated';
+    import type { CreateUserProfileInput, UserSnsCreateInput } from '../../../graphql/generated';
 
     let name = '';
     let catchphrase = '';
@@ -48,25 +48,25 @@
                 catchphrase: catchphrase,
                 introduction: introduction
             };
-        console.log(userProfileData);
-        const { data: data2 } = await client.mutate({
+        const { data: userProfileRes } = await client.mutate({
           mutation: CreateUserProfileDoc,
           variables: {
               data: userProfileData
           }
         });
-
         // UserSnsの作成
-        // await client.mutate({
-        //     mutation: CreateUserSnsDoc,
-        //     variables: {
-        //     data: {
-        //         userId, // ユーザーID
-        //         x, // X(旧Twitter)ユーザー名
-        //         facebook, // Facebookユーザー名
-        //     }
-        //     }
-        // });
+        const userSnsData: UserSnsCreateInput = {
+                user: { connect: { email: email } },
+                x: x,
+                facebook: facebook,
+                instagram: instagram
+            };
+        const { data: userSnsRes } = await client.mutate({
+          mutation: CreateUserSnsDoc,
+          variables: {
+              data: userSnsData
+          }
+        });
 
       } catch (error) {
         // エラーハンドリング

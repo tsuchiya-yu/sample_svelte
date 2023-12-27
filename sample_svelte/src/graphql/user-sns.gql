@@ -25,7 +25,7 @@ query GetUserSnsList {
 }
 
 # UserSnsの作成
-mutation CreateUserSns($data: CreateUserSnsInput!) {
+mutation CreateUserSns($data: UserSnsCreateInput!) {
   createUserSns(data: $data) {
     id
     userId
@@ -35,6 +35,21 @@ mutation CreateUserSns($data: CreateUserSnsInput!) {
     facebook
     instagram
   }
+}
+
+input UserSnsCreateInput {
+  user: UserCreateNestedOneWithoutUserSnsInput!
+  x: String
+  facebook: String
+  instagram: String
+}
+
+input UserCreateNestedOneWithoutUserSnsInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserWhereUniqueInput {
+  email: String
 }
 
 # UserSnsの更新

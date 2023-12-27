@@ -40,13 +40,6 @@ export type CreateUserProfileInput = {
   user: UserCreateNestedOneWithoutUserProfileInput;
 };
 
-export type CreateUserSnsInput = {
-  facebook?: InputMaybe<Scalars['String']['input']>;
-  instagram?: InputMaybe<Scalars['String']['input']>;
-  userId: Scalars['Int']['input'];
-  x?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type DateTimeFilter = {
   equals?: InputMaybe<Scalars['DateTime']['input']>;
   gt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -92,7 +85,7 @@ export type MutationCreateUserProfileArgs = {
 
 
 export type MutationCreateUserSnsArgs = {
-  data: CreateUserSnsInput;
+  data: UserSnsCreateInput;
 };
 
 
@@ -365,6 +358,10 @@ export type UserCreateNestedOneWithoutUserProfileInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
 };
 
+export type UserCreateNestedOneWithoutUserSnsInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+};
+
 export type UserProfile = {
   __typename?: 'UserProfile';
   catchphrase?: Maybe<Scalars['String']['output']>;
@@ -387,6 +384,13 @@ export type UserSns = {
   updatedAt: Scalars['String']['output'];
   userId: Scalars['Int']['output'];
   x?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserSnsCreateInput = {
+  facebook?: InputMaybe<Scalars['String']['input']>;
+  instagram?: InputMaybe<Scalars['String']['input']>;
+  user: UserCreateNestedOneWithoutUserSnsInput;
+  x?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserWhereUniqueInput = {
@@ -450,7 +454,7 @@ export type GetUserSnsListQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetUserSnsListQuery = { __typename?: 'Query', userSnsList?: Array<{ __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, instagram?: string | null }> | null };
 
 export type CreateUserSnsMutationVariables = Exact<{
-  data: CreateUserSnsInput;
+  data: UserSnsCreateInput;
 }>;
 
 
@@ -583,7 +587,7 @@ export const GetUserSnsListDoc = gql`
 }
     `;
 export const CreateUserSnsDoc = gql`
-    mutation CreateUserSns($data: CreateUserSnsInput!) {
+    mutation CreateUserSns($data: UserSnsCreateInput!) {
   createUserSns(data: $data) {
     id
     userId
