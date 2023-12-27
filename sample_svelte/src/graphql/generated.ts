@@ -36,13 +36,13 @@ export type CodeMeg = {
 export type CreateUserProfileInput = {
   catchphrase?: InputMaybe<Scalars['String']['input']>;
   introduction?: InputMaybe<Scalars['String']['input']>;
-  shopMstId?: InputMaybe<Scalars['Int']['input']>;
-  userId: Scalars['Int']['input'];
+  shopMst?: InputMaybe<ShopMstCreateNestedOneWithoutUserProfilesInput>;
+  user: UserCreateNestedOneWithoutUserProfileInput;
 };
 
 export type CreateUserSnsInput = {
   facebook?: InputMaybe<Scalars['String']['input']>;
-  twitter?: InputMaybe<Scalars['String']['input']>;
+  instagram?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['Int']['input'];
   x?: InputMaybe<Scalars['String']['input']>;
 };
@@ -155,6 +155,7 @@ export type NestedStringFilter = {
 
 export type Query = {
   __typename?: 'Query';
+  currentUser?: Maybe<User>;
   dummyUser?: Maybe<User>;
   isUserLoggedIn: Scalars['Boolean']['output'];
   shopMsts?: Maybe<Array<Maybe<ShopMst>>>;
@@ -222,6 +223,10 @@ export type ShopMst = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ShopMstCreateNestedOneWithoutUserProfilesInput = {
+  connect?: InputMaybe<ShopMstWhereUniqueInput>;
+};
+
 export type ShopMstOrderByWithRelationInput = {
   code?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
@@ -240,6 +245,10 @@ export enum ShopMstScalarFieldEnum {
   UpdatedAt = 'updatedAt'
 }
 
+export type ShopMstUpdateOneWithoutUserProfilesInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ShopMstWhereInput = {
   code?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -250,6 +259,7 @@ export type ShopMstWhereInput = {
 };
 
 export type ShopMstWhereUniqueInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -322,12 +332,12 @@ export type Token = {
 export type UpdateUserProfileInput = {
   catchphrase?: InputMaybe<Scalars['String']['input']>;
   introduction?: InputMaybe<Scalars['String']['input']>;
-  shopMstId?: InputMaybe<Scalars['Int']['input']>;
+  shopMst?: InputMaybe<ShopMstUpdateOneWithoutUserProfilesInput>;
 };
 
 export type UpdateUserSnsInput = {
   facebook?: InputMaybe<Scalars['String']['input']>;
-  twitter?: InputMaybe<Scalars['String']['input']>;
+  instagram?: InputMaybe<Scalars['String']['input']>;
   x?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -351,14 +361,20 @@ export type UserCreateInput = {
   updatedAt?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserCreateNestedOneWithoutUserProfileInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+};
+
 export type UserProfile = {
   __typename?: 'UserProfile';
   catchphrase?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   introduction?: Maybe<Scalars['String']['output']>;
-  shopMstId?: Maybe<Scalars['Int']['output']>;
+  shopMst?: Maybe<ShopMst>;
+  shopMstCode?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['String']['output'];
+  user?: Maybe<User>;
   userId: Scalars['Int']['output'];
 };
 
@@ -367,10 +383,14 @@ export type UserSns = {
   createdAt: Scalars['String']['output'];
   facebook?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
-  twitter?: Maybe<Scalars['String']['output']>;
+  instagram?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['String']['output'];
   userId: Scalars['Int']['output'];
   x?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserWhereUniqueInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ShopMstsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -395,19 +415,19 @@ export type GetUserProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', userProfile?: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } | null };
+export type GetUserProfileQuery = { __typename?: 'Query', userProfile?: { __typename?: 'UserProfile', id: number, userId: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } | null };
 
 export type GetUserProfileListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserProfileListQuery = { __typename?: 'Query', userProfiles?: Array<{ __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string }> | null };
+export type GetUserProfileListQuery = { __typename?: 'Query', userProfiles?: Array<{ __typename?: 'UserProfile', id: number, userId: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string }> | null };
 
 export type CreateUserProfileMutationVariables = Exact<{
   data: CreateUserProfileInput;
 }>;
 
 
-export type CreateUserProfileMutation = { __typename?: 'Mutation', createUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
+export type CreateUserProfileMutation = { __typename?: 'Mutation', createUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -415,26 +435,26 @@ export type UpdateUserProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstId?: number | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
+export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUserProfile: { __typename?: 'UserProfile', id: number, userId: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null, createdAt: string, updatedAt: string } };
 
 export type GetUserSnsQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetUserSnsQuery = { __typename?: 'Query', userSns?: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } | null };
+export type GetUserSnsQuery = { __typename?: 'Query', userSns?: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, instagram?: string | null } | null };
 
 export type GetUserSnsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserSnsListQuery = { __typename?: 'Query', userSnsList?: Array<{ __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null }> | null };
+export type GetUserSnsListQuery = { __typename?: 'Query', userSnsList?: Array<{ __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, instagram?: string | null }> | null };
 
 export type CreateUserSnsMutationVariables = Exact<{
   data: CreateUserSnsInput;
 }>;
 
 
-export type CreateUserSnsMutation = { __typename?: 'Mutation', createUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } };
+export type CreateUserSnsMutation = { __typename?: 'Mutation', createUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, instagram?: string | null } };
 
 export type UpdateUserSnsMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -442,7 +462,12 @@ export type UpdateUserSnsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, twitter?: string | null } };
+export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { __typename?: 'UserSns', id: number, userId: number, createdAt: string, updatedAt: string, x?: string | null, facebook?: string | null, instagram?: string | null } };
+
+export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string } | null };
 
 
 export const ShopMstsDoc = gql`
@@ -484,7 +509,7 @@ export const GetUserProfileDoc = gql`
   userProfile(id: $id) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -497,7 +522,7 @@ export const GetUserProfileListDoc = gql`
   userProfiles {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -510,7 +535,7 @@ export const CreateUserProfileDoc = gql`
   createUserProfile(data: $data) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -523,7 +548,7 @@ export const UpdateUserProfileDoc = gql`
   updateUserProfile(id: $id, data: $data) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -540,7 +565,7 @@ export const GetUserSnsDoc = gql`
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
     `;
@@ -553,7 +578,7 @@ export const GetUserSnsListDoc = gql`
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
     `;
@@ -566,7 +591,7 @@ export const CreateUserSnsDoc = gql`
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
     `;
@@ -579,7 +604,16 @@ export const UpdateUserSnsDoc = gql`
     updatedAt
     x
     facebook
-    twitter
+    instagram
+  }
+}
+    `;
+export const GetCurrentUserDoc = gql`
+    query GetCurrentUser {
+  currentUser {
+    id
+    name
+    email
   }
 }
     `;
@@ -876,3 +910,38 @@ export const UpdateUserSns = (
             });
             return m;
           }
+export const GetCurrentUser = (
+            options: Omit<
+              WatchQueryOptions<GetCurrentUserQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetCurrentUserQuery> & {
+              query: ObservableQuery<
+                GetCurrentUserQuery,
+                GetCurrentUserQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetCurrentUserDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetCurrentUserQuery> & {
+                query: ObservableQuery<
+                  GetCurrentUserQuery,
+                  GetCurrentUserQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        

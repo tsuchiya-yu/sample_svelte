@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { ShopMstsDoc }  from '../../../graphql/generated';
-	import { browser } from '$app/environment';
+    import { ShopMstsDoc, }  from '../../../graphql/generated';
+    import { browser } from '$app/environment';
     import client from '../../../../lib/graphql/apollo';
-    import { checkLoginStatus } from '$lib/auth';
+    import { checkLoginStatus, currentUser } from '$lib/auth';
     import InputField from '$lib/components/InputField.svelte';
     import InputLabelHalf from '$lib/components/InputLabelHalf.svelte';
     import SelectField from '$lib/components/SelectField.svelte';
@@ -11,6 +11,8 @@
     import Button from '$lib/components/Button.svelte';
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
+    import { CreateUserProfileDoc, CreateUserSnsDoc} from '../../../graphql/generated';
+    import type { CreateUserProfileInput } from '../../../graphql/generated';
 
     let name = '';
     let catchphrase = '';
@@ -18,6 +20,7 @@
     let selectedShopCode = '';
     let x = '';
     let facebook = '';
+    let instagram = '';
 
     let shopMsts: { code: string, name: string}[] = [];
 
@@ -35,7 +38,40 @@
 
     // プロフィールを更新する
     async function update() {
-        console.log('aaaa');
+      try {
+        const user = await currentUser();
+        const email = user.email;
+        // UserProfileの作成
+        const userProfileData: CreateUserProfileInput = {
+                user: { connect: { email: email } },
+                shopMst: selectedShopCode ? { connect: { code: selectedShopCode } } : undefined,
+                catchphrase: catchphrase,
+                introduction: introduction
+            };
+        console.log(userProfileData);
+        const { data: data2 } = await client.mutate({
+          mutation: CreateUserProfileDoc,
+          variables: {
+              data: userProfileData
+          }
+        });
+
+        // UserSnsの作成
+        // await client.mutate({
+        //     mutation: CreateUserSnsDoc,
+        //     variables: {
+        //     data: {
+        //         userId, // ユーザーID
+        //         x, // X(旧Twitter)ユーザー名
+        //         facebook, // Facebookユーザー名
+        //     }
+        //     }
+        // });
+
+      } catch (error) {
+        // エラーハンドリング
+        console.error('Update failed', error);
+      }
     }
 
     // 前のページに戻る
@@ -69,12 +105,16 @@
         <p class='text-gray-400 p-1.5 text-lg'>SNS</p>
         <div style='display: flex; align-items: baseline;'>
             <InputLabelHalf forId="introduction" text="X(旧Twitter)" />
-            <InputField id="catchphrase" type="text" placeholder="@nakamoto" bind:value={x} />
+            <InputField id="x" type="text" placeholder="@nakamoto" bind:value={x} />
         </div>
         <div style='display: flex; align-items: baseline;'>
             <InputLabelHalf forId="introduction" text="Facebook" />
-            <InputField id="catchphrase" type="text" placeholder="10000000000000" bind:value={facebook} />
+            <InputField id="facebook" type="text" placeholder="10000000000000" bind:value={facebook} />
         </div>
+        <div style='display: flex; align-items: baseline;'>
+          <InputLabelHalf forId="introduction" text="インスタ" />
+          <InputField id="instagram" type="text" placeholder="10000000000000" bind:value={instagram} />
+      </div>
         <Button text="更新する" type='submit' disabled={!name} />
         <p class='text-center text-gray-400 cursor-pointer' on:click={goBack}>もどる</p>
     </form>

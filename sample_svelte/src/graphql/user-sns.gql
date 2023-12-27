@@ -7,7 +7,7 @@ query GetUserSns($id: Int!) {
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
 
@@ -20,7 +20,7 @@ query GetUserSnsList {
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
 
@@ -33,7 +33,7 @@ mutation CreateUserSns($data: CreateUserSnsInput!) {
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }
 
@@ -46,6 +46,6 @@ mutation UpdateUserSns($id: Int!, $data: UpdateUserSnsInput!) {
     updatedAt
     x
     facebook
-    twitter
+    instagram
   }
 }

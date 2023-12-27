@@ -3,7 +3,7 @@ query GetUserProfile($id: Int!) {
   userProfile(id: $id) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -16,7 +16,7 @@ query GetUserProfileList {
   userProfiles {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -29,7 +29,7 @@ mutation CreateUserProfile($data: CreateUserProfileInput!) {
   createUserProfile(data: $data) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
@@ -37,15 +37,44 @@ mutation CreateUserProfile($data: CreateUserProfileInput!) {
   }
 }
 
+input CreateUserProfileInput {
+  user: UserCreateNestedOneWithoutUserProfileInput!
+  shopMst: ShopMstCreateNestedOneWithoutUserProfilesInput
+  catchphrase: String
+  introduction: String
+}
+
+input UserCreateNestedOneWithoutUserProfileInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserWhereUniqueInput {
+  id: Int
+}
+
+input ShopMstCreateNestedOneWithoutUserProfilesInput {
+  connect: ShopMstWhereUniqueInput
+}
+
+input ShopMstWhereUniqueInput {
+  code: String
+}
+
 # UserProfileの更新
 mutation UpdateUserProfile($id: Int!, $data: UpdateUserProfileInput!) {
   updateUserProfile(id: $id, data: $data) {
     id
     userId
-    shopMstId
+    shopMstCode
     catchphrase
     introduction
     createdAt
     updatedAt
   }
+}
+
+input UpdateUserProfileInput {
+  shopMstCode: String
+  catchphrase: String
+  introduction: String
 }

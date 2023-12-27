@@ -45,3 +45,12 @@ type Mutation {
   signIn(data: SignInUserArgs!): Token!
   signOut: CodeMsg!
 }
+
+# ログイン中ユーザの情報を取得
+query GetCurrentUser {
+  currentUser {
+    id
+    name
+    email
+  }
+}
