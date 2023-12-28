@@ -343,6 +343,8 @@ export type User = {
   name: Scalars['String']['output'];
   password: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+  userProfile?: Maybe<UserProfile>;
+  userSns?: Maybe<UserSns>;
 };
 
 export type UserCreateInput = {
@@ -471,7 +473,7 @@ export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 
 export const ShopMstsDoc = gql`
@@ -618,6 +620,17 @@ export const GetCurrentUserDoc = gql`
     id
     name
     email
+    userSns {
+      id
+      x
+      facebook
+      instagram
+    }
+    userProfile {
+      shopMstCode
+      catchphrase
+      introduction
+    }
   }
 }
     `;

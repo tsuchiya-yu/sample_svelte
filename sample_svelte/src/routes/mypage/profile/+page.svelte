@@ -34,6 +34,22 @@
         } catch (error) {
           console.error('Error fetching shop msts:', error);
         }
+
+        // ユーザ情報の取得
+        const user = await currentUser();
+        if (user) {
+            name = user.name;
+            if (user.userProfile) {
+                catchphrase = user.userProfile.catchphrase || '';
+                introduction = user.userProfile.introduction || '';
+                selectedShopCode = user.userProfile.shopMstCode || '';
+            }
+            if (user.userSns) {
+                x = user.userSns.x || '';
+                facebook = user.userSns.facebook || '';
+                instagram = user.userSns.instagram || '';
+            }
+        }
     });
 
     // プロフィールを更新する
@@ -47,7 +63,7 @@
                 shopMst: selectedShopCode ? { connect: { code: selectedShopCode } } : undefined,
                 catchphrase: catchphrase,
                 introduction: introduction
-            };
+        };
         const { data: userProfileRes } = await client.mutate({
           mutation: CreateUserProfileDoc,
           variables: {
@@ -60,14 +76,13 @@
                 x: x,
                 facebook: facebook,
                 instagram: instagram
-            };
+        };
         const { data: userSnsRes } = await client.mutate({
           mutation: CreateUserSnsDoc,
           variables: {
               data: userSnsData
           }
         });
-
       } catch (error) {
         // エラーハンドリング
         console.error('Update failed', error);
