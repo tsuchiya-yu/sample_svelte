@@ -49,7 +49,7 @@ input UserCreateNestedOneWithoutUserProfileInput {
 }
 
 input UserWhereUniqueInput {
-  id: Int
+  email: String
 }
 
 input ShopMstCreateNestedOneWithoutUserProfilesInput {
@@ -74,7 +74,15 @@ mutation UpdateUserProfile($id: Int!, $data: UpdateUserProfileInput!) {
 }
 
 input UpdateUserProfileInput {
-  shopMstCode: String
   catchphrase: String
   introduction: String
+  shopMst: ShopMstUpdateOneWithoutUserProfilesInput
+}
+
+input ShopMstUpdateOneWithoutUserProfilesInput {
+  connect: ShopMstConnectInput
+}
+
+input ShopMstConnectInput {
+  code: String
 }

@@ -216,6 +216,10 @@ export type ShopMst = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ShopMstConnectInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ShopMstCreateNestedOneWithoutUserProfilesInput = {
   connect?: InputMaybe<ShopMstWhereUniqueInput>;
 };
@@ -239,7 +243,7 @@ export enum ShopMstScalarFieldEnum {
 }
 
 export type ShopMstUpdateOneWithoutUserProfilesInput = {
-  code?: InputMaybe<Scalars['String']['input']>;
+  connect?: InputMaybe<ShopMstConnectInput>;
 };
 
 export type ShopMstWhereInput = {
@@ -473,7 +477,7 @@ export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 
 export const ShopMstsDoc = gql`
@@ -627,6 +631,7 @@ export const GetCurrentUserDoc = gql`
       instagram
     }
     userProfile {
+      id
       shopMstCode
       catchphrase
       introduction

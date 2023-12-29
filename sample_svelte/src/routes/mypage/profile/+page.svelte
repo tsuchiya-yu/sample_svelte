@@ -11,8 +11,8 @@
     import Button from '$lib/components/Button.svelte';
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
-    import { CreateUserProfileDoc, CreateUserSnsDoc} from '../../../graphql/generated';
-    import type { CreateUserProfileInput, UserSnsCreateInput } from '../../../graphql/generated';
+    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc  } from '../../../graphql/generated';
+    import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput } from '../../../graphql/generated';
 
     let name = '';
     let catchphrase = '';
@@ -21,6 +21,8 @@
     let x = '';
     let facebook = '';
     let instagram = '';
+    let profileId: number | null = null;;
+    let snsId: number | null = null;;
 
     let shopMsts: { code: string, name: string}[] = [];
 
@@ -40,11 +42,13 @@
         if (user) {
             name = user.name;
             if (user.userProfile) {
+                profileId = user.userProfile.id || null;
                 catchphrase = user.userProfile.catchphrase || '';
                 introduction = user.userProfile.introduction || '';
                 selectedShopCode = user.userProfile.shopMstCode || '';
             }
             if (user.userSns) {
+                snsId = user.userSns.id || null;
                 x = user.userSns.x || '';
                 facebook = user.userSns.facebook || '';
                 instagram = user.userSns.instagram || '';
@@ -52,37 +56,75 @@
         }
     });
 
-    // プロフィールを更新する
+    // 更新
     async function update() {
       try {
         const user = await currentUser();
         const email = user.email;
-        // UserProfileの作成
-        const userProfileData: CreateUserProfileInput = {
-                user: { connect: { email: email } },
-                shopMst: selectedShopCode ? { connect: { code: selectedShopCode } } : undefined,
-                catchphrase: catchphrase,
-                introduction: introduction
-        };
-        const { data: userProfileRes } = await client.mutate({
-          mutation: CreateUserProfileDoc,
-          variables: {
+        if (!profileId) {
+          // UserProfileの作成
+          const userProfileData: CreateUserProfileInput = {
+                  user: { connect: { email: email } },
+                  shopMst: selectedShopCode ? { connect: { code: selectedShopCode } } : undefined,
+                  catchphrase: catchphrase,
+                  introduction: introduction
+          };
+          const { data: userProfileRes } = await client.mutate({
+            mutation: CreateUserProfileDoc,
+            variables: {
+                data: userProfileData
+            }
+          });
+          profileId = userProfileRes.createUserProfile.id;
+        } else {
+          // UserProfileの更新
+          const shopData:ShopMstConnectInput = { code: selectedShopCode ? selectedShopCode : ''};
+          const shopConnectData:ShopMstUpdateOneWithoutUserProfilesInput = { connect: shopData };
+          const userProfileData :UpdateUserProfileInput = {
+            catchphrase: catchphrase,
+            introduction: introduction,
+            shopMst: shopConnectData
+          };
+          const { data: userProfileRes } = await client.mutate({
+            mutation: UpdateUserProfileDoc,
+            variables: {
+              id: profileId,
               data: userProfileData
-          }
-        });
-        // UserSnsの作成
-        const userSnsData: UserSnsCreateInput = {
-                user: { connect: { email: email } },
-                x: x,
-                facebook: facebook,
-                instagram: instagram
-        };
-        const { data: userSnsRes } = await client.mutate({
-          mutation: CreateUserSnsDoc,
-          variables: {
-              data: userSnsData
-          }
-        });
+            }
+          });
+          console.log(userProfileRes);
+        }
+        if (!snsId) {
+          // UserSnsの作成
+          const userSnsData: UserSnsCreateInput = {
+                  user: { connect: { email: email } },
+                  x: x,
+                  facebook: facebook,
+                  instagram: instagram
+          };
+          const { data: userSnsRes } = await client.mutate({
+            mutation: CreateUserSnsDoc,
+            variables: {
+                data: userSnsData
+            }
+          });
+          snsId = userSnsRes.createUserSns.id;
+        } else {
+          // UserSnsの更新
+          const userSnsData :UpdateUserSnsInput = {
+            x: x,
+            facebook: facebook,
+            instagram: instagram
+          };
+          const { data: userSnsRes } = await client.mutate({
+            mutation: UpdateUserSnsDoc,
+            variables: {
+                id: profileId,
+                data: userSnsData
+            }
+          });
+          console.log(userSnsRes);
+        }
       } catch (error) {
         // エラーハンドリング
         console.error('Update failed', error);

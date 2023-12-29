@@ -59,6 +59,7 @@ query GetCurrentUser {
       instagram
     }
     userProfile {
+      id
       shopMstCode
       catchphrase
       introduction

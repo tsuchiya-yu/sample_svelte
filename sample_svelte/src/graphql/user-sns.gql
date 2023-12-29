@@ -64,3 +64,9 @@ mutation UpdateUserSns($id: Int!, $data: UpdateUserSnsInput!) {
     instagram
   }
 }
+
+input UpdateUserSnsInput {
+  x: String
+  facebook: String
+  instagram: String 
+}
