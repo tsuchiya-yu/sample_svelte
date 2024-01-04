@@ -11,8 +11,8 @@
     import Button from '$lib/components/Button.svelte';
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
-    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc  } from '../../../graphql/generated';
-    import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput } from '../../../graphql/generated';
+    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc } from '../../../graphql/generated';
+    import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput, UserUpdateInput } from '../../../graphql/generated';
 
     let name = '';
     let catchphrase = '';
@@ -61,6 +61,19 @@
       try {
         const user = await currentUser();
         const email = user.email;
+        // ニックネームの更新
+        const userUpdateData:UserUpdateInput = {
+          name: name
+        };
+        const { data: userRes } = await client.mutate({
+          mutation: UpdateUserDoc,
+          variables: {
+              id: user.id,
+              data: userUpdateData
+          }
+        });
+        console.log(userRes);
+
         if (!profileId) {
           // UserProfileの作成
           const userProfileData: CreateUserProfileInput = {
@@ -125,6 +138,7 @@
           });
           console.log(userSnsRes);
         }
+        alert('更新が完了しました！');
       } catch (error) {
         // エラーハンドリング
         console.error('Update failed', error);

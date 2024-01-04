@@ -69,6 +69,7 @@ export type Mutation = {
   createUserSns: UserSns;
   signIn: Token;
   signOut: CodeMeg;
+  updateUser: User;
   updateUserProfile: UserProfile;
   updateUserSns: UserSns;
 };
@@ -91,6 +92,12 @@ export type MutationCreateUserSnsArgs = {
 
 export type MutationSignInArgs = {
   data: SignInUserArgs;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UserUpdateInput;
+  id: Scalars['Int']['input'];
 };
 
 
@@ -399,6 +406,10 @@ export type UserSnsCreateInput = {
   x?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserUpdateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']['input']>;
 };
@@ -478,6 +489,14 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
+
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: UserUpdateInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } };
 
 
 export const ShopMstsDoc = gql`
@@ -621,6 +640,27 @@ export const UpdateUserSnsDoc = gql`
 export const GetCurrentUserDoc = gql`
     query GetCurrentUser {
   currentUser {
+    id
+    name
+    email
+    userSns {
+      id
+      x
+      facebook
+      instagram
+    }
+    userProfile {
+      id
+      shopMstCode
+      catchphrase
+      introduction
+    }
+  }
+}
+    `;
+export const UpdateUserDoc = gql`
+    mutation UpdateUser($id: Int!, $data: UserUpdateInput!) {
+  updateUser(id: $id, data: $data) {
     id
     name
     email
@@ -967,3 +1007,15 @@ export const GetCurrentUser = (
             return result;
           }
         
+export const UpdateUser = (
+            options: Omit<
+              MutationOptions<any, UpdateUserMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<UpdateUserMutation, UpdateUserMutationVariables>({
+              mutation: UpdateUserDoc,
+              ...options,
+            });
+            return m;
+          }

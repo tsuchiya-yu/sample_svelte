@@ -44,11 +44,37 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   signIn(data: SignInUserArgs!): Token!
   signOut: CodeMsg!
+  updateUser(id: Int!, data: UserUpdateInput!): User!
 }
 
 # ログイン中ユーザの情報を取得
 query GetCurrentUser {
   currentUser {
+    id
+    name
+    email
+    userSns {
+      id
+      x
+      facebook
+      instagram
+    }
+    userProfile {
+      id
+      shopMstCode
+      catchphrase
+      introduction
+    }
+  }
+}
+
+input UserUpdateInput {
+  name: String
+}
+
+# ユーザ情報の更新
+mutation UpdateUser($id: Int!, $data: UserUpdateInput!) {
+  updateUser(id: $id, data: $data) {
     id
     name
     email
