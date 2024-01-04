@@ -53,6 +53,9 @@ query GetCurrentUser {
     id
     name
     email
+    isDeleted
+    createdAt
+    updatedAt
     userSns {
       id
       x
@@ -78,6 +81,33 @@ mutation UpdateUser($id: Int!, $data: UserUpdateInput!) {
     id
     name
     email
+    isDeleted
+    createdAt
+    updatedAt
+    userSns {
+      id
+      x
+      facebook
+      instagram
+    }
+    userProfile {
+      id
+      shopMstCode
+      catchphrase
+      introduction
+    }
+  }
+}
+
+# Userの情報を取得
+query GetUser($id: Int!) {
+  user(id: $id) {
+    id
+    name
+    email
+    isDeleted
+    createdAt
+    updatedAt
     userSns {
       id
       x

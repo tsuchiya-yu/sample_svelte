@@ -488,7 +488,7 @@ export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 export type UpdateUserMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -496,7 +496,14 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, name: string, email: string, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } };
+
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 
 export const ShopMstsDoc = gql`
@@ -643,6 +650,9 @@ export const GetCurrentUserDoc = gql`
     id
     name
     email
+    isDeleted
+    createdAt
+    updatedAt
     userSns {
       id
       x
@@ -664,6 +674,33 @@ export const UpdateUserDoc = gql`
     id
     name
     email
+    isDeleted
+    createdAt
+    updatedAt
+    userSns {
+      id
+      x
+      facebook
+      instagram
+    }
+    userProfile {
+      id
+      shopMstCode
+      catchphrase
+      introduction
+    }
+  }
+}
+    `;
+export const GetUserDoc = gql`
+    query GetUser($id: Int!) {
+  user(id: $id) {
+    id
+    name
+    email
+    isDeleted
+    createdAt
+    updatedAt
     userSns {
       id
       x
@@ -1019,3 +1056,38 @@ export const UpdateUser = (
             });
             return m;
           }
+export const GetUser = (
+            options: Omit<
+              WatchQueryOptions<GetUserQueryVariables>, 
+              "query"
+            >
+          ): Readable<
+            ApolloQueryResult<GetUserQuery> & {
+              query: ObservableQuery<
+                GetUserQuery,
+                GetUserQueryVariables
+              >;
+            }
+          > => {
+            const q = client.watchQuery({
+              query: GetUserDoc,
+              ...options,
+            });
+            var result = readable<
+              ApolloQueryResult<GetUserQuery> & {
+                query: ObservableQuery<
+                  GetUserQuery,
+                  GetUserQueryVariables
+                >;
+              }
+            >(
+              { data: {} as any, loading: true, error: undefined, networkStatus: 1, query: q },
+              (set) => {
+                q.subscribe((v: any) => {
+                  set({ ...v, query: q });
+                });
+              }
+            );
+            return result;
+          }
+        
