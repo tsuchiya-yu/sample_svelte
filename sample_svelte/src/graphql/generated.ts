@@ -514,6 +514,14 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userImageFile?: string | null, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
+export type UploadUserImageMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  file: Scalars['Upload']['input'];
+}>;
+
+
+export type UploadUserImageMutation = { __typename?: 'Mutation', uploadUserImage?: boolean | null };
+
 
 export const ShopMstsDoc = gql`
     query ShopMsts {
@@ -726,6 +734,11 @@ export const GetUserDoc = gql`
       introduction
     }
   }
+}
+    `;
+export const UploadUserImageDoc = gql`
+    mutation UploadUserImage($id: Int!, $file: Upload!) {
+  uploadUserImage(id: $id, file: $file)
 }
     `;
 export const ShopMsts = (
@@ -1103,3 +1116,15 @@ export const GetUser = (
             return result;
           }
         
+export const UploadUserImage = (
+            options: Omit<
+              MutationOptions<any, UploadUserImageMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<UploadUserImageMutation, UploadUserImageMutationVariables>({
+              mutation: UploadUserImageDoc,
+              ...options,
+            });
+            return m;
+          }

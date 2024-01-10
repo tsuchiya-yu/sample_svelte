@@ -1,13 +1,11 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { getToken } from '$lib/tokenStorage';
+import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
-// HTTPリンクの設定
-const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql',
-  headers: {
-    'Apollo-Require-Preflight': 'true',
-  },
+// Uploadリンクの設定
+const uploadLink = createUploadLink({
+  uri: 'http://localhost:3000/graphql', // GraphQLサーバーのエンドポイント
 });
 
 // 認証トークンをリクエストヘッダーに追加するためのミドルウェア
@@ -23,7 +21,7 @@ const authLink = setContext((_, { headers }) => {
 
 // Apollo Clientのインスタンスを作成
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(uploadLink), // authLinkとuploadLinkを結合
   cache: new InMemoryCache(),
 });
 

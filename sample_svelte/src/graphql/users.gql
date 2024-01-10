@@ -128,3 +128,8 @@ query GetUser($id: Int!) {
     }
   }
 }
+
+# 画像アップロード
+mutation UploadUserImage($id: Int!, $file: Upload!) {
+  uploadUserImage(id: $id, file: $file) 
+}

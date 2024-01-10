@@ -11,10 +11,12 @@
     import Button from '$lib/components/Button.svelte';
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
-    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc } from '../../../graphql/generated';
+    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc, UploadUserImageDoc } from '../../../graphql/generated';
     import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput, UserUpdateInput } from '../../../graphql/generated';
 
+    let user_id = 0;
     let name = '';
+    let email = '';
     let catchphrase = '';
     let introduction = '';
     let selectedShopCode = '';
@@ -40,7 +42,9 @@
         // ユーザ情報の取得
         const user = await currentUser();
         if (user) {
+            user_id = user.id;
             name = user.name;
+            email = user.email;
             if (user.userProfile) {
                 profileId = user.userProfile.id || null;
                 catchphrase = user.userProfile.catchphrase || '';
@@ -60,7 +64,6 @@
     async function update() {
       try {
         const user = await currentUser();
-        const email = user.email;
         // ニックネームの更新
         const userUpdateData:UserUpdateInput = {
           name: name
@@ -151,6 +154,31 @@
             window.history.back();
         }
     }
+
+    // 画像の更新
+    async function fileUpload(event: any) {
+      const files = event.target.files;
+      if (!files) return;
+
+      try {
+        const { data } = await client.mutate({
+          mutation: UploadUserImageDoc,
+          variables: {
+            id: user_id,
+            file: files,
+          },
+        });
+
+        if (data.uploadUserImage) {
+          console.log('アップロード成功');
+        } else {
+          console.log('アップロード失敗');
+        }
+      } catch (error) {
+        console.error('アップロードエラー', error);
+      }
+    }
+
 </script>
 
 <div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
@@ -189,4 +217,5 @@
         <Button text="更新する" type='submit' disabled={!name} />
         <p class='text-center text-gray-400 cursor-pointer' on:click={goBack}>もどる</p>
     </form>
+    <input type="file" id="fileInput" on:change={fileUpload} />
 </div>
