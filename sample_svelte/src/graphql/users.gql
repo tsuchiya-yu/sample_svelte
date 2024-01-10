@@ -1,6 +1,7 @@
 # users.gql
 
 scalar DateTime
+scalar Upload
 
 type User {
   id: Int!
@@ -9,6 +10,7 @@ type User {
   isDeleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  userImageFile: String
 }
 
 input UserCreateInput {
@@ -45,6 +47,7 @@ type Mutation {
   signIn(data: SignInUserArgs!): Token!
   signOut: CodeMsg!
   updateUser(id: Int!, data: UserUpdateInput!): User!
+  uploadUserImage(id: Int!, file: Upload!): Boolean
 }
 
 # ログイン中ユーザの情報を取得
@@ -56,6 +59,7 @@ query GetCurrentUser {
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x
@@ -84,6 +88,7 @@ mutation UpdateUser($id: Int!, $data: UserUpdateInput!) {
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x
@@ -108,6 +113,7 @@ query GetUser($id: Int!) {
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x

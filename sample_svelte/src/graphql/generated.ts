@@ -20,6 +20,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type BooleanFilter = {
@@ -72,6 +73,7 @@ export type Mutation = {
   updateUser: User;
   updateUserProfile: UserProfile;
   updateUserSns: UserSns;
+  uploadUserImage?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -109,6 +111,12 @@ export type MutationUpdateUserProfileArgs = {
 
 export type MutationUpdateUserSnsArgs = {
   data: UpdateUserSnsInput;
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationUploadUserImageArgs = {
+  file: Scalars['Upload']['input'];
   id: Scalars['Int']['input'];
 };
 
@@ -354,6 +362,7 @@ export type User = {
   name: Scalars['String']['output'];
   password: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+  userImageFile?: Maybe<Scalars['String']['output']>;
   userProfile?: Maybe<UserProfile>;
   userSns?: Maybe<UserSns>;
 };
@@ -488,7 +497,7 @@ export type UpdateUserSnsMutation = { __typename?: 'Mutation', updateUserSns: { 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userImageFile?: string | null, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 export type UpdateUserMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -496,14 +505,14 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userImageFile?: string | null, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, name: string, email: string, isDeleted: boolean, createdAt: any, updatedAt: any, userImageFile?: string | null, userSns?: { __typename?: 'UserSns', id: number, x?: string | null, facebook?: string | null, instagram?: string | null } | null, userProfile?: { __typename?: 'UserProfile', id: number, shopMstCode?: string | null, catchphrase?: string | null, introduction?: string | null } | null } | null };
 
 
 export const ShopMstsDoc = gql`
@@ -653,6 +662,7 @@ export const GetCurrentUserDoc = gql`
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x
@@ -677,6 +687,7 @@ export const UpdateUserDoc = gql`
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x
@@ -701,6 +712,7 @@ export const GetUserDoc = gql`
     isDeleted
     createdAt
     updatedAt
+    userImageFile
     userSns {
       id
       x
