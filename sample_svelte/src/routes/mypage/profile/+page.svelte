@@ -160,6 +160,21 @@
       const files = event.target.files;
       if (!files) return;
 
+      for (const file of files) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("ファイルサイズは10MB以下です。");
+          return;
+        }
+        if (!file.type.match('image.*')) {
+          alert("アップロードできるのは画像ファイルのみです。");
+          return;
+        }
+        if (file.name.length > 255) {
+          alert("ファイル名は255文字以下である必要があります。");
+          return;
+        }
+      }
+
       try {
         const { data } = await client.mutate({
           mutation: UploadUserImageDoc,
@@ -170,12 +185,12 @@
         });
 
         if (data.uploadUserImage) {
-          console.log('アップロード成功');
+          alert('更新が完了しました！');
         } else {
-          console.log('アップロード失敗');
+          alert('更新に失敗しました。時間をおいてから改めてお試しください。');
         }
       } catch (error) {
-        console.error('アップロードエラー', error);
+        console.error('Update faile', error);
       }
     }
 
