@@ -14,7 +14,9 @@
     import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc, UploadUserImageDoc } from '../../../graphql/generated';
     import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput, UserUpdateInput } from '../../../graphql/generated';
 
+    let fileInput: HTMLInputElement;
     let user_id = 0;
+    let user_img = '';
     let name = '';
     let email = '';
     let catchphrase = '';
@@ -45,6 +47,7 @@
             user_id = user.id;
             name = user.name;
             email = user.email;
+            user_img = user.userImageFile;
             if (user.userProfile) {
                 profileId = user.userProfile.id || null;
                 catchphrase = user.userProfile.catchphrase || '';
@@ -155,6 +158,11 @@
         }
     }
 
+    // ファイルアップロードボタンのトリガー
+    function triggerFileInput() {
+      fileInput.click();
+    }
+
     // 画像の更新
     async function fileUpload(event: any) {
       const files = event.target.files;
@@ -199,38 +207,44 @@
 <div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
     <Heading text="プロフィール編集" />
     <form on:submit|preventDefault={update}>
-        <div style='display: flex; align-items: baseline;'>
+        <div class='inline-block w-full text-center'>
+            <img class='w-32 h-32 object-contain m-auto' src={user_img}/>
+            <input type="file" id="fileInput" on:change={fileUpload} bind:this={fileInput} class="hidden" />
+            <div class='w-1/3 mx-auto inline-block'>
+              <Button text="アイコン編集" on:click={triggerFileInput}/>
+            </div>
+        </div>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="name" text="ニックネーム" />
             <InputField id="name" type="text" placeholder="はなこ" bind:value={name} required/>
         </div>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="catchphrase" text="ひとこと" />
             <InputField id="catchphrase" type="text" placeholder="365日中本！" bind:value={catchphrase} required/>
         </div>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="catchphrase" text="ホーム" />
             <SelectField id="shop" bind:value={selectedShopCode} options={shopMsts} required blank={true} />
         </div>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="introduction" text="自己紹介" />
             <TextareaField id="introduction" placeholder="初めて中本に行ったのは二十歳の時。それから10年ずっと通い続けています。" bind:value={introduction} required />
         </div>
         <Hr/>
         <p class='text-gray-400 p-1.5 text-lg'>SNS</p>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="introduction" text="X(旧Twitter)" />
             <InputField id="x" type="text" placeholder="@nakamoto" bind:value={x} />
         </div>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
             <InputLabelHalf forId="introduction" text="Facebook" />
             <InputField id="facebook" type="text" placeholder="10000000000000" bind:value={facebook} />
         </div>
-        <div style='display: flex; align-items: baseline;'>
+        <div class="flex items-baseline">
           <InputLabelHalf forId="introduction" text="インスタ" />
           <InputField id="instagram" type="text" placeholder="10000000000000" bind:value={instagram} />
       </div>
         <Button text="更新する" type='submit' disabled={!name} />
         <p class='text-center text-gray-400 cursor-pointer' on:click={goBack}>もどる</p>
     </form>
-    <input type="file" id="fileInput" on:change={fileUpload} />
 </div>
