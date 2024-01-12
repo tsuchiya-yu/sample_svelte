@@ -33,7 +33,7 @@
     });
   </script>
   
-  <div class='p-20 mx-auto w-[1100px] max-w-full bg-gray-200 rounded-3xl'>
+  <div class='p-20 mx-auto w-[1100px] max-w-full bg-gray-100 rounded-3xl'>
     {#if siteUpdate}
         <h1 class="text-3xl font-bold">{siteUpdate.title}</h1>
         <p>{formatDate(siteUpdate.publishedAt)}</p>
