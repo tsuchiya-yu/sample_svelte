@@ -10,11 +10,11 @@
     import CustomLink from '$lib/components/CustomLink.svelte';
     import Hr from '$lib/components/Hr.svelte';
     import { saveToken } from '$lib/tokenStorage';
+    import { isLoggedIn } from '$lib/auth';
     
     let email = '';
     let password = '';
     
-    // TODO:このmutationは共通化したい
     const SIGN_IN = gql`
     mutation SignIn($email: String!, $password: String!) {
         signIn(data: { email: $email, password: $password }) {
@@ -34,9 +34,8 @@
             if (token) {
                 console.log('ログイン成功:', token);
                 saveToken(token);
-                // TODO:ログイン後の処理
-                // ・マイペにリダイレクト
-                goto('/');
+                isLoggedIn.set(true);
+                goto('/mypage');
             }
         } catch (error) {
             console.error('ログインエラー:', error);
