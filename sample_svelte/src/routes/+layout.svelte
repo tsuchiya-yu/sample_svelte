@@ -26,6 +26,7 @@
   let accontsForSignIn = [
     { title: 'マイページ', url: '/mypage' },
     { title: 'プロフィール設定', url: '/mypage/profile' },
+    { title: 'ログアウト', url: '/logout' },
   ];
 
 </script>

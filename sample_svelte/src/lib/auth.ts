@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import client from '../../lib/graphql/apollo';
 import gql from 'graphql-tag';
-import { getToken } from './tokenStorage';
+import { getToken, removeToken } from './tokenStorage';
 import { goto } from '$app/navigation';
 import { GetCurrentUserDoc }  from '../graphql/generated';
 
@@ -51,5 +51,15 @@ export async function currentUser() {
         alert('エラーが発生しました。改めてログインしてください。');
         isLoggedIn.set(false);
         goto('/login');
+    }
+}
+
+// ログアウト
+export async function signOut() {
+    try {
+        removeToken();
+        isLoggedIn.set(false);
+    } catch (error) {
+        console.error("エラー:", error);
     }
 }
