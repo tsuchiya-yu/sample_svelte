@@ -28,24 +28,11 @@
       <div class='py-4'>
         {#each siteUpdates as update}
           <div class='py-2'>
-            <p class="published text-sm">{formatDate(update.publishedAt)}</p>
-            <h2 class='title text-base'>{update.title}</h2>
+            <p class="text-gray-700 text-sm">{formatDate(update.publishedAt)}</p>
+            <h2 class='font-bold text-base'>{update.title}</h2>
             <a class='cursor-pointer' href="/updates/{update.id}">詳細はこちら</a>
           </div>
         {/each}
       </div>
   </div>
 </div>
-
-
-<style lang="postcss">
-  .title {
-    /* font-size: 14px; */
-    font-weight: bold;
-  }
-
-  .published {
-    /* font-size: 10px; */
-    color: #888888;
-  }
-</style>

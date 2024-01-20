@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { ShopMstsDoc, }  from '../../../graphql/generated';
     import { browser } from '$app/environment';
     import client from '../../../../lib/graphql/apollo';
     import { checkLoginStatus, currentUser } from '$lib/auth';
@@ -11,8 +10,11 @@
     import Button from '$lib/components/Button.svelte';
     import Heading from '$lib/components/Heading.svelte';
     import Hr from '$lib/components/Hr.svelte';
-    import { CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc, UploadUserImageDoc } from '../../../graphql/generated';
+    import { ShopMstsDoc, CreateUserProfileDoc, CreateUserSnsDoc, UpdateUserSnsDoc, UpdateUserProfileDoc, UpdateUserDoc, UploadUserImageDoc } from '../../../graphql/generated';
     import type { CreateUserProfileInput, UserSnsCreateInput, UpdateUserSnsInput, UpdateUserProfileInput, ShopMstUpdateOneWithoutUserProfilesInput, ShopMstConnectInput, UserUpdateInput } from '../../../graphql/generated';
+    import type { ShopMst } from '../../../types';
+
+    let shopMsts: ShopMst[] = [];
 
     let fileInput: HTMLInputElement;
     let user_id = 0;
@@ -27,8 +29,6 @@
     let instagram = '';
     let profileId: number | null = null;;
     let snsId: number | null = null;;
-
-    let shopMsts: { code: string, name: string}[] = [];
 
     onMount(async () => {
         await checkLoginStatus();

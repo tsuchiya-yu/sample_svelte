@@ -19,6 +19,7 @@ export interface User {
     isDeleted: boolean;
     createdAt: string;
     updatedAt: string;
+    userImageFile: string;
     userSns: UserSns;
     userProfile: UserProfile;
 }
@@ -29,4 +30,9 @@ export interface SiteUpdate {
     description: string;
     publishedAt: string;
     updatedAt: string;
+}
+
+export interface ShopMst {
+    code: string;
+    name: string;
 }
