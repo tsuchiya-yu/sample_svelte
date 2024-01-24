@@ -16,6 +16,9 @@
 
     let shopName = '';
 
+    // 現在ページのURL
+    $: currentPageUrl = $page.url.toString();
+
     onMount(async () => {
         pageSharemodalStore.set(false);
 
@@ -91,8 +94,8 @@
             <p class="min-w-[100px] mr-4 text-gray-400">プロフィール</p>
             <p>{user.userProfile?.introduction} {user.userProfile?.introduction} {user.userProfile?.introduction}</p>
         </div>
-    {/if}
 
-    <ModalSharePage/>
+        <ModalSharePage title={`${user.name}|プロフィールページ`} url={currentPageUrl} />
+    {/if}
 
 </div>
