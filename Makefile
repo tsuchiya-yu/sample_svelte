@@ -4,4 +4,4 @@ up:
 	docker-compose up
 
 app:
-	docker-compose exec web bash
+	docker-compose exec web sh
