@@ -23,6 +23,10 @@
             goto(`/users/${user.id}/profile`);
         }
     }
+
+    function gotoActivities() {
+        goto('/mypage/activities');
+    }
 </script>
 
 <div class='relative flex-grow w-full max-w-xl mx-auto p-6 lg:p-8'>
@@ -36,6 +40,11 @@
                 </div>
                 <div>
                     <ButtonReverse text="プロフィールページ" paddingClass="px-2 py-1" on:click={gotoProfile}/>
+                </div>
+            </div>
+            <div class='flex items-baseline'>
+                <div>
+                    <ButtonReverse text="活動を投稿する" paddingClass="px-2 py-1" on:click={gotoActivities}/>
                 </div>
             </div>
         </div>
