@@ -9,4 +9,4 @@ generates:
       - typescript-operations
       - graphql-codegen-svelte-apollo
     config:
-      clientPath: ./lib/graphql/apollo
+      clientPath: ../../lib/graphql/apollo
